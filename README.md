@@ -1,5 +1,6 @@
 # mesh-cam
 
+[![PlatformIO Build](https://github.com/stackzac22/mesh-cam/actions/workflows/build.yml/badge.svg)](https://github.com/stackzac22/mesh-cam/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A two-board off-grid camera node for a Meshtastic mesh.
