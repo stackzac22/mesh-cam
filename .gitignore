@@ -2,3 +2,7 @@
 .vscode/
 build/
 *.bin
+
+# Real WiFi/MQTT credentials and node IDs — never commit
+secrets.yaml
+ha/secrets.yaml
