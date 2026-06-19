@@ -1,5 +1,7 @@
 # mesh-cam
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A two-board off-grid camera node for a Meshtastic mesh.
 
 - **Heltec LoRa 32 V3** runs stock Meshtastic with the **Serial Module** enabled. It is
