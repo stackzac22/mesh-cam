@@ -1,0 +1,28 @@
+# Add to Home Assistant configuration.yaml (or an mqtt: package).
+# Replace REGION (US), CHANNELNAME (LongFast) and GATEWAY_NODEID with yours.
+# Find the topic by watching the broker:  mosquitto_sub -t 'msh/#' -v
+
+mqtt:
+  binary_sensor:
+    - name: "Cam1 Motion"
+      unique_id: mesh_cam1_motion
+      state_topic: "msh/US/2/json/LongFast/!GATEWAY_NODEID"
+      # JSON text packets look like: {"type":"text","payload":{"text":"MOTION at cam1"}, ...}
+      value_template: >-
+        {% if value_json.type == 'text'
+              and 'MOTION at cam1' in value_json.payload.text %}
+          ON
+        {% else %}
+          OFF
+        {% endif %}
+      payload_on: "ON"
+      payload_off: "OFF"
+      device_class: motion
+      off_delay: 30        # auto-clear after 30s since the node only fires an event
+
+  sensor:
+    - name: "Cam1 Last Message"
+      unique_id: mesh_cam1_lastmsg
+      state_topic: "msh/US/2/json/LongFast/!GATEWAY_NODEID"
+      value_template: >-
+        {% if value_json.type == 'text' %}{{ value_json.payload.text }}{% endif %}

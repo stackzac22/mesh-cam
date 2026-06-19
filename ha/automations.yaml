@@ -1,0 +1,42 @@
+# Add to Home Assistant automations.yaml (or paste via the Automations UI -> Edit in YAML).
+# Replace REGION (US) and GATEWAY_NODEID_DECIMAL (the gateway "num" from `meshtastic --info`).
+
+# 1) Notify your phone when the field camera reports motion.
+- id: mesh_cam1_motion_notify
+  alias: "Mesh Cam1 - notify on motion"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.cam1_motion
+      to: "on"
+  action:
+    - service: notify.notify
+      data:
+        title: "Mesh camera"
+        message: "Motion detected at cam1 (field node)"
+
+# 2) When motion fires, automatically ask the field node to take a photo to SD.
+- id: mesh_cam1_autosnap
+  alias: "Mesh Cam1 - auto snap on motion"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.cam1_motion
+      to: "on"
+  action:
+    - service: mqtt.publish
+      data:
+        topic: "msh/US/2/json/mqtt/"
+        payload: >-
+          {"from": GATEWAY_NODEID_DECIMAL, "type": "sendtext",
+           "payload": "snap", "channel": 0}
+
+# 3) A manual "snap" script you can call from a button/dashboard.
+script:
+  mesh_cam1_snap:
+    alias: "Mesh Cam1 - take photo"
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: "msh/US/2/json/mqtt/"
+          payload: >-
+            {"from": GATEWAY_NODEID_DECIMAL, "type": "sendtext",
+             "payload": "snap", "channel": 0}

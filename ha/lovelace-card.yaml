@@ -1,0 +1,42 @@
+# Lovelace dashboard card for the mesh-cam field node.
+# Add via Dashboard -> Edit -> Add Card -> Manual, then paste this.
+# Assumes the entities from ha/configuration.yaml and the script from ha/automations.yaml.
+
+type: vertical-stack
+title: Mesh Cam 1 (field)
+cards:
+  - type: entities
+    entities:
+      - entity: binary_sensor.cam1_motion
+        name: Motion
+      - entity: sensor.cam1_last_message
+        name: Last message
+    state_color: true
+
+  # Big motion indicator that glows red on detection.
+  - type: button
+    name: Motion status
+    entity: binary_sensor.cam1_motion
+    icon: mdi:motion-sensor
+    tap_action:
+      action: more-info
+    state_color: true
+
+  # Fire a snap (calls the script that publishes the MQTT downlink).
+  - type: button
+    name: Take photo
+    icon: mdi:camera
+    tap_action:
+      action: call-service
+      service: script.mesh_cam1_snap
+    show_state: false
+
+  # Optional: surface the auto-discovered gateway node's health.
+  # Replace with the real entity ids the Meshtastic HACS integration creates.
+  - type: entities
+    title: Gateway (Cardputer ADV)
+    entities:
+      - entity: sensor.cardputer_adv_battery_level
+        name: Battery
+      - entity: sensor.cardputer_adv_snr
+        name: SNR
